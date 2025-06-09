@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 
-// Utilidad para decodificar el payload de un JWT
 function parseJwt(token) {
     try {
         const base64Payload = token.split(".")[1];
@@ -21,7 +20,6 @@ export default function App() {
     const [name, setName] = useState(null);
     const logoutTimer = useRef(null);
 
-    // Chequear sesión en sessionStorage al montar
     useEffect(() => {
         const storedName = sessionStorage.getItem("user.name");
         const storedToken = sessionStorage.getItem("token");
@@ -37,10 +35,8 @@ export default function App() {
                 sessionStorage.removeItem("token");
             }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Programa el autologout
     const scheduleLogout = (delayMs) => {
         if (logoutTimer.current) clearTimeout(logoutTimer.current);
         logoutTimer.current = setTimeout(() => {
@@ -48,18 +44,12 @@ export default function App() {
         }, delayMs);
     };
 
-    // Logout manual o por vencimiento de token
     const handleLogout = () => {
         sessionStorage.removeItem("user.name");
         sessionStorage.removeItem("token");
-        setName(null);
-        if (logoutTimer.current) {
-            clearTimeout(logoutTimer.current);
-            logoutTimer.current = null;
-        }
+        window.location.href = "/";
     };
 
-    // Callback para Login: guardar name+token y programar autologout
     const handleLoginSuccess = (userName, userToken) => {
         const payload = parseJwt(userToken);
         if (!payload) return;
@@ -67,8 +57,7 @@ export default function App() {
         const msUntilExpiry = (payload.exp - nowInSeconds) * 1000;
         sessionStorage.setItem("user.name", userName);
         sessionStorage.setItem("token", userToken);
-        setName(userName);
-        scheduleLogout(msUntilExpiry);
+        window.location.href = "/";
     };
 
     return (
@@ -77,10 +66,7 @@ export default function App() {
                 <Navbar name={name} onLogout={handleLogout} />
                 <Routes>
                     <Route path="/" element={<Landing />} />
-                    <Route
-                        path="/login"
-                        element={<Login onLoginSuccess={handleLoginSuccess} />}
-                    />
+                    <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
                 </Routes>
             </div>
         </Router>

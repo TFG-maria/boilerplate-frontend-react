@@ -1,7 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Navbar({ name, onLogout }) {
+    const location = useLocation();
+    if (location.pathname === "/login") return null;
+
     return (
         <nav className="bg-white shadow p-4">
             <div className="container mx-auto flex justify-between items-center">
