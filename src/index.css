@@ -4,18 +4,5 @@
 @tailwind components;
 @tailwind utilities;
 body {
-    @apply bg-blue-100;
+    @apply bg-pink-100;
 }
-/* Si no se usa Tailwind, reemplazar por CSS global simple, e.g.: */
-/*
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background-color: #f3f4f6;
-}
-.container {
-  max-width: 1024px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-*/
